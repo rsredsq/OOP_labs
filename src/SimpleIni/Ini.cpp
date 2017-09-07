@@ -10,4 +10,9 @@ namespace SimpleIni {
     IniParser parser(fileStream);
     return parser.resolveIni();
   }
+
+  Ini Ini::ResolveFromContent(std::wstringstream stringStream) {
+    IniParser parser(stringStream);
+    return parser.resolveIni();
+  }
 }

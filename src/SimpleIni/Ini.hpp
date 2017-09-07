@@ -17,7 +17,7 @@ namespace SimpleIni {
   public:
     static Ini ResolveFromFile(std::string fileName);
 
-    static Ini ResolveFromContent(std::wifstream stringStream);
+    static Ini ResolveFromContent(std::wstringstream stringStream);
 
     Ini(const Ini&) = delete;
 
