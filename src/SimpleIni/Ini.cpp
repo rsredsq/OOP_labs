@@ -20,7 +20,7 @@ namespace SimpleIni {
   }
 
   template<>
-  const std::string Ini::get<std::string>(const std::string& sectionName, const std::string& paramName) const
+  std::string Ini::get<std::string>(const std::string& sectionName, const std::string& paramName) const
   throw(SectionNotFoundException, ParamNotFoundException) {
     checkRange(sectionName, paramName);
     auto value = sections.at(sectionName).at(paramName);
@@ -28,14 +28,14 @@ namespace SimpleIni {
   }
 
   template<>
-  const int Ini::get<int>(const std::string& sectionName, const std::string& paramName) const
+  int Ini::get<int>(const std::string& sectionName, const std::string& paramName) const
   throw(SectionNotFoundException, ParamNotFoundException) {
     auto value = get<std::string>(sectionName, paramName);
     return std::stoi(value);
   }
 
   template<>
-  const double Ini::get<double>(const std::string& sectionName, const std::string& paramName) const
+  double Ini::get<double>(const std::string& sectionName, const std::string& paramName) const
   throw(SectionNotFoundException, ParamNotFoundException) {
     auto value = get<std::string>(sectionName, paramName);
     return std::stod(value);

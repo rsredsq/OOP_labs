@@ -7,11 +7,11 @@ using namespace SimpleIni;
 
 int main() {
 
-  auto iniFile = Ini::ResolveFromFile("test.ini");
+  auto iniFile = Ini::ResolveFromFile("ini/lab01_input_correct_09.ini");
 
-  auto testVal = iniFile.get<int>("DEBUG", "PlentySockMaxQSize");
-
-  std::wcout << testVal;
+//  auto testVal = iniFile.get<int>("COMMON", "LogBsonMessages");
+//
+//  std::cout << testVal;
 
   return 0;
 }

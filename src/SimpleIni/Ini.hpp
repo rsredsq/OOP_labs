@@ -3,6 +3,7 @@
 #include <string>
 #include <sstream>
 #include <unordered_map>
+#include <boost/regex.hpp>
 #include "exceptions/FileOpenException.hpp"
 #include "exceptions/ParamNotFoundException.hpp"
 #include "exceptions/SectionNotFoundException.hpp"
@@ -33,7 +34,7 @@ namespace SimpleIni {
     Ini& operator=(Ini&&) = default;
 
     template<typename T>
-    const T get(const std::string& sectionName, const std::string& paramName) const
+    T get(const std::string& sectionName, const std::string& paramName) const
     throw(SectionNotFoundException, ParamNotFoundException);
 
     bool hasSection(const std::string& sectionName) const noexcept;

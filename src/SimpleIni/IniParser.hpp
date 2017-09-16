@@ -20,6 +20,7 @@ namespace SimpleIni {
     Ini resolveIni() const;
 
     Parameters parseSection(const std::string& sectionName) const;
+    boost::smatch matchString(std::string& str) const;
 
     std::istream& contentStream;
 
