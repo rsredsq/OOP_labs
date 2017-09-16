@@ -3,9 +3,11 @@
 #include <string>
 #include <sstream>
 #include <unordered_map>
+#include "exceptions/FileOpenException.hpp"
 
 namespace SimpleIni {
   class Ini;
+
   struct Section;
 
   using Parameters = std::unordered_map<std::wstring, std::wstring>;
@@ -15,7 +17,8 @@ namespace SimpleIni {
     friend class IniParser;
 
   public:
-    static Ini ResolveFromFile(std::string fileName);
+    static Ini ResolveFromFile(const std::string& fileName)
+    throw(FileOpenException);
 
     static Ini ResolveFromContent(std::wstringstream stringStream);
 
@@ -23,7 +26,11 @@ namespace SimpleIni {
 
     Ini& operator=(const Ini&) = delete;
 
+    ~Ini() = default;
+
     Ini(Ini&&) = default;
+
+    Ini& operator=(Ini&&) = default;
 
     const Parameters& getSection(const std::wstring& sectionName) const {
       return sections.at(sectionName);
@@ -32,6 +39,8 @@ namespace SimpleIni {
   private:
     explicit Ini(Sections sections)
         : sections(std::move(sections)) {};
+
+
     Sections sections;
   };
 }

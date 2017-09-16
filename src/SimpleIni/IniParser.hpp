@@ -9,7 +9,7 @@ namespace SimpleIni {
     friend class Ini;
 
   public:
-    explicit IniParser(const std::wistream& contentStream);
+    explicit IniParser(std::wistream& contentStream);
 
     IniParser(const IniParser&) = delete;
 
@@ -18,7 +18,9 @@ namespace SimpleIni {
   private:
     Ini resolveIni() const;
 
-    const std::wistream& contentStream;
+    Ini tryParseIni() const;
+
+    std::wistream& contentStream;
   };
 }
 

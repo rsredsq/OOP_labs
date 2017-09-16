@@ -5,8 +5,12 @@
 #include "IniParser.hpp"
 
 namespace SimpleIni {
-  Ini Ini::ResolveFromFile(std::string fileName) {
+  Ini Ini::ResolveFromFile(const std::string& fileName) throw(FileOpenException) {
     std::wifstream fileStream(fileName);
+
+    if (!fileStream.is_open())
+      throw FileOpenException(fileName.c_str());
+
     IniParser parser(fileStream);
     return parser.resolveIni();
   }
