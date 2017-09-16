@@ -11,13 +11,12 @@ namespace SimpleIni {
     if (!fileStream.is_open())
       throw FileOpenException(fileName);
 
-    IniParser parser(fileStream);
-    return parser.resolveIni();
+    return ResolveFromContent(fileStream);
   }
 
-  Ini Ini::ResolveFromContent(std::stringstream stringStream) {
-    IniParser parser(stringStream);
-    return parser.resolveIni();
+  Ini Ini::ResolveFromContent(std::istream& stream) {
+    IniParser parser(stream);
+    return std::move(parser.resolveIni());
   }
 
   template<>
@@ -40,6 +39,14 @@ namespace SimpleIni {
   throw(SectionNotFoundException, ParamNotFoundException) {
     auto value = get<std::string>(sectionName, paramName);
     return std::stod(value);
+  }
+
+  bool Ini::hasSection(const std::string& sectionName) const noexcept {
+    return sections.count(sectionName) > 0;
+  }
+
+  bool Ini::hasParameter(const std::string& sectionName, const std::string& paramName) const noexcept {
+    return hasSection(sectionName) && sections.at(sectionName).count(paramName) > 0;
   }
 
   void Ini::checkRange(const std::string& sectionName, const std::string& paramName) const

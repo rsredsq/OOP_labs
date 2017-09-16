@@ -20,7 +20,7 @@ namespace SimpleIni {
     static Ini ResolveFromFile(const std::string& fileName)
     throw(FileOpenException);
 
-    static Ini ResolveFromContent(std::stringstream stringStream);
+    static Ini ResolveFromContent(std::istream& stream);
 
     Ini(const Ini&) = delete;
 
@@ -35,6 +35,10 @@ namespace SimpleIni {
     template<typename T>
     const T get(const std::string& sectionName, const std::string& paramName) const
     throw(SectionNotFoundException, ParamNotFoundException);
+
+    bool hasSection(const std::string& sectionName) const noexcept;
+
+    bool hasParameter(const std::string& sectionName, const std::string& paramName) const noexcept;
 
   private:
     explicit Ini(Sections sections)

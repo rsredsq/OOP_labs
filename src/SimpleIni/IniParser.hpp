@@ -19,8 +19,6 @@ namespace SimpleIni {
   private:
     Ini resolveIni() const;
 
-    Ini tryParseIni() const;
-
     Parameters parseSection(const std::string& sectionName) const;
 
     std::istream& contentStream;
