@@ -1,47 +1,49 @@
-#include <regex>
 #include <iostream>
-#include <boost/regex.hpp>
 
 #include "IniParser.hpp"
 
 namespace SimpleIni {
 
   IniParser::IniParser(std::wistream& contentStream)
-      : contentStream(contentStream) {
+      : contentStream(contentStream), regex(L"(?:;+.*)?$"
+                                                "|\\[\\s*(?<section>\\w+)\\s*\\]"
+                                                "|(?<key>\\w+)"
+                                                "\\s*=\\s*"
+                                                "(?<value>.*?)"
+                                                "(?:;+.*)?$") {
 
   }
 
   Ini IniParser::resolveIni() const {
-
-    boost::wregex regex(L"(?:;+.*)?$|\\[\\s*(?<section>\\w+)\\s*\\]"
-                         "|(?<key>\\w+)"
-                         "\\s*=\\s*"
-                         "(?<value>.*?)"
-                         "(?:;+.*)?$");
-
     Sections sections;
-    Parameters params;
 
     std::wstring currStr;
-
-    std::wstring section;
-    std::wstring key;
-    std::wstring value;
 
     while (std::getline(contentStream, currStr)) {
       boost::wsmatch match;
       boost::regex_match(currStr, match, regex);
 
-//      section = match["section"].length() > 0 ? match["section"] : section;
-//      key = match["key"].length() > 0 ? match["key"] : key;
-//      value = match["value"].length() > 0 ? match["value"] : value;
+      if (match["section"].length() > 0) {
+        sections[match["section"]] = parseSection(match["section"]);
+      }
     }
 
     return Ini(sections);
   }
 
-  void parseSection(const std::wstring& sectionName) {
-    
+  Parameters IniParser::parseSection(const std::wstring& sectionName) const {
+    boost::wsmatch match;
+    Parameters params;
+    do {
+      std::wstring currStr;
+      std::getline(contentStream, currStr);
+      boost::regex_match(currStr, match, regex);
+
+      params.insert({match["key"], match["value"]});
+
+    } while (!match["section"].length() && !contentStream.eof());
+
+    return params;
   }
 
 }

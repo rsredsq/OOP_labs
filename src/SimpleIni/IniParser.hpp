@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include <boost/regex.hpp>
 #include "Ini.hpp"
 
 namespace SimpleIni {
@@ -20,7 +21,11 @@ namespace SimpleIni {
 
     Ini tryParseIni() const;
 
+    Parameters parseSection(const std::wstring& sectionName) const;
+
     std::wistream& contentStream;
+
+    boost::wregex regex;
   };
 }
 
