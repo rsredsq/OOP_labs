@@ -2,7 +2,7 @@
 #include <string>
 
 namespace SimpleIni {
-  class ParamNotFoundException : std::exception {
+  class ParamNotFoundException : public std::exception {
   public:
     explicit ParamNotFoundException(const std::string& paramName) noexcept
         : message("Parameter " + paramName + " not found") {

@@ -2,7 +2,7 @@
 #include <string>
 
 namespace SimpleIni {
-  class SectionNotFoundException : std::exception {
+  class SectionNotFoundException : public std::exception {
   public:
     explicit SectionNotFoundException(const std::string& sectionName)
         : message("Section " + sectionName + " not found") {
