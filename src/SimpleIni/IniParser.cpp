@@ -14,7 +14,7 @@ namespace SimpleIni {
 
   }
 
-Ini IniParser::resolveIni() const {
+  Ini IniParser::resolveIni() const {
     Sections sections;
 
     std::string currStr;
