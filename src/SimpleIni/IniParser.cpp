@@ -4,8 +4,8 @@
 
 namespace SimpleIni {
 
-  IniParser::IniParser(std::wistream& contentStream)
-      : contentStream(contentStream), regex(L"(?:;+.*)?$"
+  IniParser::IniParser(std::istream& contentStream)
+      : contentStream(contentStream), regex("(?:;+.*)?$"
                                                 "|\\[\\s*(?<section>\\w+)\\s*\\]"
                                                 "|(?<key>\\w+)"
                                                 "\\s*=\\s*"
@@ -14,13 +14,13 @@ namespace SimpleIni {
 
   }
 
-  Ini IniParser::resolveIni() const {
+Ini IniParser::resolveIni() const {
     Sections sections;
 
-    std::wstring currStr;
+    std::string currStr;
 
     while (std::getline(contentStream, currStr)) {
-      boost::wsmatch match;
+      boost::smatch match;
       boost::regex_match(currStr, match, regex);
 
       if (match["section"].length() > 0) {
@@ -31,11 +31,11 @@ namespace SimpleIni {
     return Ini(sections);
   }
 
-  Parameters IniParser::parseSection(const std::wstring& sectionName) const {
-    boost::wsmatch match;
+  Parameters IniParser::parseSection(const std::string& sectionName) const {
+    boost::smatch match;
     Parameters params;
     do {
-      std::wstring currStr;
+      std::string currStr;
       std::getline(contentStream, currStr);
       boost::regex_match(currStr, match, regex);
 

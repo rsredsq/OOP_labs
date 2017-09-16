@@ -4,14 +4,14 @@
 #include <sstream>
 #include <unordered_map>
 #include "exceptions/FileOpenException.hpp"
+#include "exceptions/ParamNotFoundException.hpp"
+#include "exceptions/SectionNotFoundException.hpp"
 
 namespace SimpleIni {
   class Ini;
 
-  struct Section;
-
-  using Parameters = std::unordered_map<std::wstring, std::wstring>;
-  using Sections = std::unordered_map<std::wstring, Parameters>;
+  using Parameters = std::unordered_map<std::string, std::string>;
+  using Sections = std::unordered_map<std::string, Parameters>;
 
   class Ini {
     friend class IniParser;
@@ -20,7 +20,7 @@ namespace SimpleIni {
     static Ini ResolveFromFile(const std::string& fileName)
     throw(FileOpenException);
 
-    static Ini ResolveFromContent(std::wstringstream stringStream);
+    static Ini ResolveFromContent(std::stringstream stringStream);
 
     Ini(const Ini&) = delete;
 
@@ -32,14 +32,16 @@ namespace SimpleIni {
 
     Ini& operator=(Ini&&) = default;
 
-    const Parameters& getSection(const std::wstring& sectionName) const {
-      return sections.at(sectionName);
-    }
+    template<typename T>
+    const T get(const std::string& sectionName, const std::string& paramName) const
+    throw(SectionNotFoundException, ParamNotFoundException);
 
   private:
     explicit Ini(Sections sections)
         : sections(std::move(sections)) {};
 
+    void checkRange(const std::string& sectionName, const std::string& paramName) const
+    throw(SectionNotFoundException, ParamNotFoundException);
 
     Sections sections;
   };

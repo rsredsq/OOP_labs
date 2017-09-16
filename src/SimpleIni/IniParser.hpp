@@ -10,7 +10,7 @@ namespace SimpleIni {
     friend class Ini;
 
   public:
-    explicit IniParser(std::wistream& contentStream);
+    explicit IniParser(std::istream& contentStream);
 
     IniParser(const IniParser&) = delete;
 
@@ -21,11 +21,11 @@ namespace SimpleIni {
 
     Ini tryParseIni() const;
 
-    Parameters parseSection(const std::wstring& sectionName) const;
+    Parameters parseSection(const std::string& sectionName) const;
 
-    std::wistream& contentStream;
+    std::istream& contentStream;
 
-    boost::wregex regex;
+    boost::regex regex;
   };
 }
 

@@ -9,9 +9,9 @@ int main() {
 
   auto iniFile = Ini::ResolveFromFile("test.ini");
 
-  auto testSection = iniFile.getSection(L"DEBUG");
+  auto testVal = iniFile.get<int>("DEBUG", "PlentySockMaxQSize");
 
-  std::wcout << testSection.at(L"PlentySockMaxQSize");
+  std::wcout << testVal;
 
   return 0;
 }

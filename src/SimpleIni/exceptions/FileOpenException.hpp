@@ -2,18 +2,19 @@
 #include <string>
 
 namespace SimpleIni {
-  class FileOpenException : std::exception {
+  class FileOpenException : public std::exception {
   public:
-    explicit FileOpenException(const char* fileName) noexcept : fileName(fileName) {
+    explicit FileOpenException(const std::string& fileName) noexcept
+        : message("Unable to open file " + fileName) {
     }
 
     ~FileOpenException() noexcept override = default;
 
     const char* what() const noexcept override {
-      return fileName;
+      return message.what();
     }
 
   private:
-    const char* fileName;
+    std::runtime_error message;
   };
 }
