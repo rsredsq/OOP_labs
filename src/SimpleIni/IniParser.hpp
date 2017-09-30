@@ -17,14 +17,17 @@ namespace SimpleIni {
     IniParser& operator=(const IniParser&) = delete;
 
   private:
-    Ini resolveIni() const;
+    Ini resolveIni();
 
-    Parameters parseSection(const std::string& sectionName) const;
-    boost::smatch matchString(std::string& str) const;
+    Parameters parseSection();
+    bool matchCurrentLine();
+    std::istream& nextLine();
 
     std::istream& contentStream;
 
     boost::regex regex;
+    boost::smatch currentLineMatch;
+    std::string currentLine;
   };
 }
 

@@ -14,51 +14,41 @@ namespace SimpleIni {
                                                 "(?:;+.*)?$") {
   }
 
-  Ini IniParser::resolveIni() const {
+  Ini IniParser::resolveIni() {
     Sections sections;
 
-    std::string currStr;
+    while (!contentStream.eof()) {
+      matchCurrentLine();
+      bool sectionMatched = currentLineMatch["section"].matched;
 
-    while (std::getline(contentStream, currStr)) {
-      auto match = matchString(currStr);
-
-      if (match["section"].matched) {
-        std::cout << match["section"] << std::endl;
-        sections[match["section"]] = parseSection(match["section"]);
+      if (sectionMatched) {
+        std::string sectionName = currentLineMatch["section"];
+        sections[sectionName] = parseSection();
+        continue;
       }
+      nextLine();
     }
 
     return Ini(sections);
   }
 
-  Parameters IniParser::parseSection(const std::string& sectionName) const {
-    boost::smatch match;
-    Parameters params;
-    int prevLinePosition;
-    do {
-      std::string currStr;
-      prevLinePosition = contentStream.tellg();
-      std::getline(contentStream, currStr);
-      boost::trim(currStr);
-      if (currStr.empty()) continue;
-
-      boost::regex_match(currStr, match, regex);
-      if (!match["key"].matched) continue;
-
-      params.insert({match["key"], match["value"]});
-      std::cout << match["key"] << "=" << match["value"] << std::endl;
-
-    } while (!match["section"].matched && !contentStream.eof());
-
-    contentStream.seekg(prevLinePosition);
-    return params;
+  Parameters IniParser::parseSection() {
+    Parameters currentSectionParams;
+    while (nextLine() && matchCurrentLine() && !currentLineMatch["section"].matched) {
+      if (currentLine.empty()) continue;
+      if (!currentLineMatch["key"].matched) continue;
+      currentSectionParams.insert({currentLineMatch["key"], currentLineMatch["value"]});
+    }
+    return currentSectionParams;
   }
 
-  boost::smatch IniParser::matchString(std::string& str) const {
-    boost::trim(str);
-    boost::smatch match;
-    boost::regex_match(str, match, regex);
-    return match;
+  inline bool IniParser::matchCurrentLine() {
+    boost::trim(currentLine);
+    return boost::regex_match(currentLine, currentLineMatch, regex);
+  }
+
+  inline std::istream& IniParser::nextLine() {
+    return std::getline(contentStream, currentLine);
   }
 
 }
