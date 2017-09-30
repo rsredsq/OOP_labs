@@ -41,7 +41,9 @@ public:
 
 private:
   void calculateAverage() const;
+
   void invalidateCache() const;
+
   std::multiset<T> container;
   mutable boost::optional<double> averageValue;
   //this is definitely doesn't make sense, O(log(n)) complexity without caching
