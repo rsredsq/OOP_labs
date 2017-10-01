@@ -4,9 +4,7 @@
 #include <sstream>
 #include <unordered_map>
 #include <boost/regex.hpp>
-#include "exceptions/FileOpenException.hpp"
-#include "exceptions/ParamNotFoundException.hpp"
-#include "exceptions/SectionNotFoundException.hpp"
+#include "ParserExceptions.hpp"
 
 namespace SimpleIni {
   class Ini;
