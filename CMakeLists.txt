@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.8)
+project(lab3)
+
+set(CMAKE_CXX_STANDARD 14)
+
+set(SOURCE_FILES src/main.cpp src/SimpleWav/WavReader.cpp src/SimpleWav/WavReader.hpp src/SimpleWav/WavWriter.cpp src/SimpleWav/WavWriter.hpp src/SimpleWav/Wav.cpp src/SimpleWav/Wav.hpp)
+add_executable(lab3 ${SOURCE_FILES})
