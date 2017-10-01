@@ -36,7 +36,7 @@ public:
 
   long getCountAbove(T threshold) const;
 
-  std::string asString() const;
+  std::string toString() const;
 
 private:
   void calculateAverage() const;

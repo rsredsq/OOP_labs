@@ -33,17 +33,17 @@ void StatisticMultiset<T>::addNums(const StatisticMultiset& multiset) {
 
 template<class T>
 void StatisticMultiset<T>::addNumsFromFile(const std::string& path) {
-  std::ifstream numsStream{path};
-  while (!numsStream.eof()) {
+  std::ifstream fileStream{path};
+  while (!fileStream.eof()) {
     T value;
-    numsStream >> value;
+    fileStream >> value;
     container.insert(value);
   }
 }
 
 template<class T>
 T StatisticMultiset<T>::getMax() const {
-  return *(--container.cend());
+  return *container.crbegin();
 }
 
 template<class T>
@@ -76,7 +76,7 @@ long StatisticMultiset<T>::getCountAbove(T threshold) const {
 }
 
 template<class T>
-std::string StatisticMultiset<T>::asString() const {
+std::string StatisticMultiset<T>::toString() const {
   std::string out;
   for (auto value: container) {
     auto strValue = std::to_string(value);
