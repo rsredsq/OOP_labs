@@ -5,6 +5,12 @@
 
 namespace SimpleIni {
 
+  enum IniParseCases {
+    section = 1,
+    key = 2,
+    value = 3
+  };
+
   IniParser::IniParser(std::istream& contentStream)
       : contentStream(contentStream), regex("(?:;+.*)?$"
                                                 "|\\[\\s*(?<section>\\w+)\\s*\\]"
@@ -19,10 +25,10 @@ namespace SimpleIni {
 
     while (!contentStream.eof()) {
       matchCurrentLine();
-      bool sectionMatched = currentLineMatch["section"].matched;
+      bool sectionMatched = currentLineMatch[section].matched;
 
       if (sectionMatched) {
-        std::string sectionName = currentLineMatch["section"];
+        std::string sectionName = currentLineMatch[section];
         sections[sectionName] = parseSection();
         continue;
       }
@@ -34,10 +40,10 @@ namespace SimpleIni {
 
   Parameters IniParser::parseSection() {
     Parameters currentSectionParams;
-    while (nextLine() && matchCurrentLine() && !currentLineMatch["section"].matched) {
+    while (nextLine() && matchCurrentLine() && !currentLineMatch[section].matched) {
       if (currentLine.empty()) continue;
-      if (!currentLineMatch["key"].matched) continue;
-      currentSectionParams.insert({currentLineMatch["key"], currentLineMatch["value"]});
+      if (!currentLineMatch[key].matched) continue;
+      currentSectionParams.insert({currentLineMatch[key], currentLineMatch[value]});
     }
     return currentSectionParams;
   }
