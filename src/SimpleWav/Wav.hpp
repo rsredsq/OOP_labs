@@ -1,43 +1,41 @@
 #pragma once
 
-
 #include <string>
+#include <memory>
+#include <vector>
+#include "WavHeader.hpp"
 
-class Wav {
-public:
-  explicit Wav(const std::string& filePath);
+namespace SimpleWav {
+  using WavDataContainer = std::vector<boost::endian::little_int8_t>;
 
+  class Wav {
+    friend class WavReader;
 
-  void convertStereoToMono();
+  public:
 
-  void applyReverbation(double delay, double decay);
+    void convertStereoToMono();
 
-  void changeSampleRate(int newSampleRate);
+    void applyReverbation(double delay, double decay);
 
-  void cutBegin(double timeBegin);
+    void changeSampleRate(int newSampleRate);
 
-  void cutEnd(double timeEnd);
+    void cutBegin(double timeBegin);
 
-  void save();
+    void cutEnd(double timeEnd);
 
-  bool isStereo();
+    void save() const;
 
-  const std::string& getDescription() {
-    return description;
-  }
+    bool isStereo() const;
 
-  int getSampleRate() {
-    return sampleRate;
+    const std::string& getDescription() const;
+
+    int getSampleRate() const;
+
+    int getChannelsCount() const;
+
+  private:
+    explicit Wav() = default;
+    WAVHeader header;
+    WavDataContainer data;
   };
-
-  int getChanCount() {
-    return channelsCount;
-  };
-
-private:
-  std::string description;
-  int channelsCount;
-  int sampleRate;
-};
-
-
+}

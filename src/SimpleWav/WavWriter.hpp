@@ -1,7 +1,9 @@
 #pragma once
 
-class WavWriter {
+namespace SimpleWav {
+  class WavWriter {
 
-};
+  };
+}
 
 
