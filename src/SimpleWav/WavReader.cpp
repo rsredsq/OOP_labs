@@ -5,7 +5,7 @@
 namespace SimpleWav {
 
   Wav WavReader::ResolveFromFile(const std::string& filePath) {
-    std::ifstream fileContent(filePath);
+    std::ifstream fileContent(filePath, std::ios::binary);
     if (fileContent.bad()) throw "PIZDA";
     WavReader reader(fileContent);
     return reader.parseWavFile();
@@ -18,7 +18,8 @@ namespace SimpleWav {
   Wav WavReader::parseWavFile() {
     Wav wav{};
     wav.header = readWavHeader();
-    wav.data = readWavData();
+    wav.header.dataHeader.data = readWavData();
+    wav.verifyHeader();
     return std::move(wav);
   }
 
@@ -33,12 +34,10 @@ namespace SimpleWav {
   }
 
   WavDataContainer WavReader::readWavData() {
-    auto container = WavDataContainer();
-    auto dataBegin = std::istream_iterator<boost::endian::little_uint8_t>(contentStream);
-    auto dataEnd = std::istream_iterator<boost::endian::little_uint8_t>();
+    auto dataBegin = std::istreambuf_iterator<char>(contentStream);
+    auto dataEnd = std::istreambuf_iterator<char>();
 
-    container.insert(container.begin(), dataBegin, dataEnd);
-    return std::move(container);
+    return WavDataContainer(dataBegin, dataEnd);
   }
 
 #define readFromContentStream(value, size) (contentStream.read(reinterpret_cast<char*>(&(value)), size))

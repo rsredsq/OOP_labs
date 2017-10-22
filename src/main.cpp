@@ -1,9 +1,6 @@
 #include <iostream>
-#include <fstream>
 #include "SimpleWav/Wav.hpp"
-#include "SimpleWav/WavHeader.hpp"
 #include "SimpleWav/WavReader.hpp"
-#include <functional>
 
 using namespace std;
 using namespace SimpleWav;
@@ -11,8 +8,9 @@ using namespace SimpleWav;
 int main() {
 
 
-//  auto parsedWav = WavReader::ResolveFromFile("res/0.wav");
+  auto parsedWav = WavReader::ResolveFromFile("res/0.wav");
 
+  cout << parsedWav.getDescription();
 
 //  cout << parsedWav.header.rifChunk.chunkId->data();
 //  cout << parsedWav.header.rifChunk.format;

@@ -6,7 +6,6 @@
 #include "WavHeader.hpp"
 
 namespace SimpleWav {
-  using WavDataContainer = std::vector<boost::endian::little_int8_t>;
 
   class Wav {
     friend class WavReader;
@@ -19,15 +18,19 @@ namespace SimpleWav {
 
     void changeSampleRate(int newSampleRate);
 
-    void cutBegin(double timeBegin);
+    void cutBegin(const std::chrono::milliseconds timeBegin);
 
-    void cutEnd(double timeEnd);
+    void cutEnd(const std::chrono::milliseconds timeEnd);
 
     void save() const;
 
     bool isStereo() const;
 
-    const std::string& getDescription() const;
+    WavDataContainer& data() {
+      return header.dataHeader.data;
+    }
+
+    const std::string getDescription() const;
 
     int getSampleRate() const;
 
@@ -36,6 +39,16 @@ namespace SimpleWav {
   private:
     explicit Wav() = default;
     WAVHeader header;
-    WavDataContainer data;
+
+    void updateWavHeader();
+    void updateRifHeader();
+    void updateFmtHeader();
+    void updateDataHeader();
+    void verifyHeader();
+
+    long bytesInMs(const std::chrono::milliseconds ms) {
+      return (header.fmtChunk.bitsPerSample / 8) * header.fmtChunk.sampleRate * ms.count();
+    }
+
   };
 }

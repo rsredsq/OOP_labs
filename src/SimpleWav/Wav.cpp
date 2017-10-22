@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Wav.hpp"
 
 namespace SimpleWav {
@@ -11,7 +12,7 @@ namespace SimpleWav {
   }
 
 
-  bool Wav::isStereo() {
+  bool Wav::isStereo() const {
     return false;
   }
 
@@ -19,19 +20,61 @@ namespace SimpleWav {
 
   }
 
-  void Wav::save() {
+  void Wav::save() const {
 
   }
 
-  void Wav::cutEnd(double timeEnd) {
+  void Wav::cutBegin(const std::chrono::milliseconds timeBegin) {
+    using namespace std::chrono;
+    long bytesToDelete = bytesInMs(milliseconds(timeBegin));
+    data().erase(data().begin(), data().begin() + bytesToDelete);
+    updateWavHeader();
+  }
+
+  void Wav::cutEnd(const std::chrono::milliseconds timeEnd) {
+    using namespace std::chrono;
+    long bytesToDelete = bytesInMs(milliseconds(timeEnd));
+    data().erase(data().end() - bytesToDelete, data().end());
+    updateWavHeader();
+  }
+
+  void Wav::updateWavHeader() {
+//    updateRifHeader();
+//    updateFmtHeader();
+//    updateDataHeader();
+  }
+
+  void Wav::updateRifHeader() {
 
   }
 
-  void Wav::cutBegin(double timeBegin) {
-
+  void Wav::verifyHeader() {
+    header.verify();
   }
 
-//  const std::string& Wav::getDescription() {
-//    return ;
-//  }
+#define writeHeaderData(stream, value) (stream) << #value " = "; \
+                            (stream) << header.value; \
+                            (stream) << "\n";
+
+  const std::string Wav::getDescription() const {
+    std::ostringstream stream;
+
+    writeHeaderData(stream, rifChunk.chunkId);
+    writeHeaderData(stream, rifChunk.chunkSize);
+    writeHeaderData(stream, rifChunk.format);
+
+    writeHeaderData(stream, fmtChunk.subChunk1Id);
+    writeHeaderData(stream, fmtChunk.subChunk1Size);
+    writeHeaderData(stream, fmtChunk.audioFormat);
+    writeHeaderData(stream, fmtChunk.numChannels);
+    writeHeaderData(stream, fmtChunk.sampleRate);
+    writeHeaderData(stream, fmtChunk.byteRate);
+    writeHeaderData(stream, fmtChunk.blockAlign);
+    writeHeaderData(stream, fmtChunk.bitsPerSample);
+
+    writeHeaderData(stream, dataHeader.subChunk2Id);
+    writeHeaderData(stream, dataHeader.subChunk2Size);
+
+    return stream.str();
+  }
 }
