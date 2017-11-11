@@ -1,6 +1,7 @@
 #include <iostream>
 #include "SimpleWav/Wav.hpp"
 #include "SimpleWav/WavReader.hpp"
+#include "SimpleWav/WavExceptions.hpp"
 
 using namespace std;
 using namespace SimpleWav;

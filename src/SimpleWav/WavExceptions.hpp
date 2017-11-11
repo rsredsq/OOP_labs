@@ -1,22 +1,31 @@
 #pragma once
 
-class RIFHeaderCorruptedException : std::runtime_error {
+#include <exception>
+
+class IOException : public std::runtime_error {
 public:
-  RIFHeaderCorruptedException() : std::runtime_error("") {
+  explicit IOException(const std::string& fileName) : std::runtime_error("IO exception: " + fileName) {
 
   }
 };
 
-class FMTHeaderCorruptedException : std::runtime_error {
+class RIFHeaderCorruptedException : public std::runtime_error {
 public:
-  FMTHeaderCorruptedException() : std::runtime_error("") {
+  explicit RIFHeaderCorruptedException() : std::runtime_error("RIFHeaderCorruptedException") {
 
   }
 };
 
-class DATAHeaderCorruptedException : std::runtime_error {
+class FMTHeaderCorruptedException : public std::runtime_error {
 public:
-  DATAHeaderCorruptedException() : std::runtime_error("") {
+  explicit FMTHeaderCorruptedException() : std::runtime_error("FMTHeaderCorruptedException") {
+
+  }
+};
+
+class DATAHeaderCorruptedException : public std::runtime_error {
+public:
+  explicit DATAHeaderCorruptedException() : std::runtime_error("DATAHeaderCorruptedException") {
 
   }
 };

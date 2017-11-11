@@ -6,7 +6,7 @@ namespace SimpleWav {
 
   Wav WavReader::ResolveFromFile(const std::string& filePath) {
     std::ifstream fileContent(filePath, std::ios::binary);
-    if (fileContent.bad()) throw "PIZDA";
+    if (not fileContent.is_open()) throw IOException(filePath);
     WavReader reader(fileContent);
     return reader.parseWavFile();
   }
