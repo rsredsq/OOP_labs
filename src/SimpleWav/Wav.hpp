@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include <chrono>
 #include "WavHeader.hpp"
 
 namespace SimpleWav {
@@ -14,21 +15,19 @@ namespace SimpleWav {
 
     void convertStereoToMono();
 
-    void applyReverbation(double delay, double decay);
+    void applyReverberation(double delay, double decay);
 
     void changeSampleRate(int newSampleRate);
 
-    void cutBegin(const std::chrono::milliseconds timeBegin);
+    void cutBegin(std::chrono::milliseconds timeBegin);
 
-    void cutEnd(const std::chrono::milliseconds timeEnd);
-
-    void save() const;
+    void cutEnd(std::chrono::milliseconds timeEnd);
 
     bool isStereo() const;
 
-    WavDataContainer& data() {
-      return header.dataHeader.data;
-    }
+    WavHeader& header();
+
+    WavDataContainer& data();
 
     const std::string getDescription() const;
 
@@ -38,17 +37,13 @@ namespace SimpleWav {
 
   private:
     explicit Wav() = default;
-    WAVHeader header;
+    WavHeader wavHeader;
 
-    void updateWavHeader();
+    void updateHeader();
     void updateRifHeader();
     void updateFmtHeader();
     void updateDataHeader();
     void verifyHeader();
-
-    long bytesInMs(const std::chrono::milliseconds ms) {
-      return (header.fmtChunk.bitsPerSample / BYTE_SIZE) * header.fmtChunk.sampleRate * ms.count();
-    }
-
+    long bytesInMs(std::chrono::milliseconds ms);
   };
 }

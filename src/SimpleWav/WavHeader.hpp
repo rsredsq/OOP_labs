@@ -39,7 +39,7 @@ namespace SimpleWav {
     WavDataContainer data;
   };
 
-  struct WAVHeader {
+  struct WavHeader {
     RIFChunk rifChunk;
     FMTChunk fmtChunk;
     DATAHeader dataHeader;

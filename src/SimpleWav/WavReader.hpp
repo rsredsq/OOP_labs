@@ -12,7 +12,7 @@ namespace SimpleWav {
     static Wav ResolveFromFile(const std::string& filePath);
   private:
     Wav parseWavFile();
-    WAVHeader readWavHeader();
+    WavHeader readWavHeader();
     WavDataContainer readWavData();
     FMTChunk readFmtChunk();
     RIFChunk readRifChunk();
@@ -21,5 +21,3 @@ namespace SimpleWav {
     std::istream& contentStream;
   };
 }
-
-
