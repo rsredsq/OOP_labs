@@ -47,7 +47,7 @@ namespace SimpleWav {
     void verifyHeader();
 
     long bytesInMs(const std::chrono::milliseconds ms) {
-      return (header.fmtChunk.bitsPerSample / 8) * header.fmtChunk.sampleRate * ms.count();
+      return (header.fmtChunk.bitsPerSample / BYTE_SIZE) * header.fmtChunk.sampleRate * ms.count();
     }
 
   };

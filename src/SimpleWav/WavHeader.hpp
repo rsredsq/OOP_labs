@@ -14,6 +14,8 @@ namespace SimpleWav {
   const boost::endian::little_int32_t PCM_AUDIO_FORMAT = 1;
   const boost::endian::big_int32_t DATA_CHUNK_ID = 0x64617461;
 
+  constexpr int BYTE_SIZE = 8;
+
   struct RIFChunk {
     boost::endian::big_int32_t chunkId;
     boost::endian::little_int32_t chunkSize;
@@ -52,8 +54,8 @@ namespace SimpleWav {
       bool chunkIdCorrect = rifChunk.chunkId == RIF_CHUNK_ID;
 
       bool chunkSizeCorrect = rifChunk.chunkSize ==
-                              (4 + (8 + fmtChunk.subChunk1Size) +
-                               (8 + dataHeader.subChunk2Size));
+                              (4 + (BYTE_SIZE + fmtChunk.subChunk1Size) +
+                               (BYTE_SIZE + dataHeader.subChunk2Size));
 
       bool formatCorrect = rifChunk.format == WAVE_FORMAT_HEX;
 
@@ -70,10 +72,10 @@ namespace SimpleWav {
       bool byteRateCorrect = fmtChunk.byteRate ==
                              fmtChunk.sampleRate *
                              fmtChunk.numChannels *
-                             (fmtChunk.bitsPerSample / 8);
+                             (fmtChunk.bitsPerSample / BYTE_SIZE);
 
       bool blockAligned = fmtChunk.blockAlign ==
-                          fmtChunk.numChannels * (fmtChunk.bitsPerSample / 8);
+                          fmtChunk.numChannels * (fmtChunk.bitsPerSample / BYTE_SIZE);
 
       if (not(chunkIdCorrect && chunkSizeCorrect && audioFormatSupported && byteRateCorrect && blockAligned)) {
         throw FMTHeaderCorruptedException();
