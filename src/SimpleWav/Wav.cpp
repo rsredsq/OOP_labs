@@ -19,16 +19,16 @@ namespace SimpleWav {
     //TODO
   }
 
-  void Wav::cutBegin(const std::chrono::milliseconds timeBegin) {
+  void Wav::cutBegin(const std::chrono::seconds timeBegin) {
     using namespace std::chrono;
-    long bytesToDelete = bytesInMs(milliseconds(timeBegin));
+    long bytesToDelete = bytesInSec(timeBegin);
     data().erase(data().begin(), data().begin() + bytesToDelete);
     updateHeader();
   }
 
-  void Wav::cutEnd(const std::chrono::milliseconds timeEnd) {
+  void Wav::cutEnd(const std::chrono::seconds timeEnd) {
     using namespace std::chrono;
-    long bytesToDelete = bytesInMs(milliseconds(timeEnd));
+    long bytesToDelete = bytesInSec(timeEnd);
     data().erase(data().end() - bytesToDelete, data().end());
     updateHeader();
   }
@@ -72,8 +72,8 @@ namespace SimpleWav {
     return wavHeader;
   }
 
-  long Wav::bytesInMs(const std::chrono::milliseconds ms) {
-    return (wavHeader.fmtChunk.bitsPerSample / BYTE_SIZE) * wavHeader.fmtChunk.sampleRate * ms.count();
+  long Wav::bytesInSec(std::chrono::seconds sec) {
+    return (wavHeader.fmtChunk.bitsPerSample / BYTE_SIZE) * wavHeader.fmtChunk.sampleRate * sec.count();
   }
 
 #define writeHeaderData(stream, value) (stream) << #value " = "; \

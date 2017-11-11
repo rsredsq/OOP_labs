@@ -19,9 +19,9 @@ namespace SimpleWav {
 
     void changeSampleRate(int newSampleRate);
 
-    void cutBegin(std::chrono::milliseconds timeBegin);
+    void cutBegin(std::chrono::seconds timeBegin);
 
-    void cutEnd(std::chrono::milliseconds timeEnd);
+    void cutEnd(std::chrono::seconds timeEnd);
 
     bool isStereo() const;
 
@@ -44,6 +44,6 @@ namespace SimpleWav {
     void updateFmtHeader();
     void updateDataHeader();
     void verifyHeader();
-    long bytesInMs(std::chrono::milliseconds ms);
+    long bytesInSec(std::chrono::seconds ms);
   };
 }
