@@ -19,7 +19,6 @@ public class SimpleFactorizer {
       final Class<? extends FactorizationAlgorithm> algorithmClass,
       final NumbersIngester numbersIngester) {
     this(algorithmClass, numbersIngester, System.out::println);
-    //test git
   }
 
   @SneakyThrows
