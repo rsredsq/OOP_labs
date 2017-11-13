@@ -1,7 +1,7 @@
 package com.rsredsq.oop.lab4;
 
-public class SimpleFactorizerRunner {
+public class Lab4Runner {
   public static void main(String[] args) {
-    SimpleFactorizer.main(args);
+    Lab4.main(args);
   }
 }
