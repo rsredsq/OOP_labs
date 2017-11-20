@@ -18,7 +18,7 @@ public class Lab4 {
       final OutputStreamNumbersProducer numbersProducer = new OutputStreamNumbersProducer(outputFileStream);
 
       SimpleFactorizer factorizer = new SimpleFactorizer(
-          SimpleFactorizationAlgorithm.class, numbersIngester, numbersProducer);
+          new SimpleFactorizationAlgorithm(), numbersIngester, numbersProducer);
 
       factorizer.factorize();
     }

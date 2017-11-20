@@ -6,17 +6,18 @@ import java.util.List;
 
 public class SimpleFactorizer extends Factorizer {
 
+
   public SimpleFactorizer(
-      final Class<? extends FactorizationAlgorithm> algorithmClass,
+      final FactorizationAlgorithm algorithm,
       final NumbersIngester numbersIngester) {
-    super(algorithmClass, numbersIngester);
+    super(algorithm, numbersIngester);
   }
 
   public SimpleFactorizer(
-      final Class<? extends FactorizationAlgorithm> algorithmClass,
+      final FactorizationAlgorithm algorithm,
       final NumbersIngester numbersIngester,
       final NumbersProducer numbersProducer) {
-    super(algorithmClass, numbersIngester, numbersProducer);
+    super(algorithm, numbersIngester, numbersProducer);
   }
 
   public void factorize() {

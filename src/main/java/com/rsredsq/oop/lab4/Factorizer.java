@@ -9,17 +9,17 @@ public abstract class Factorizer {
   protected NumbersProducer numbersProducer;
 
   public Factorizer(
-      final Class<? extends FactorizationAlgorithm> algorithmClass,
+      final FactorizationAlgorithm algorithm,
       final NumbersIngester numbersIngester) {
-    this(algorithmClass, numbersIngester, System.out::println);
+    this(algorithm, numbersIngester, System.out::println);
   }
 
   @SneakyThrows
   public Factorizer(
-      final Class<? extends FactorizationAlgorithm> algorithmClass,
+      final FactorizationAlgorithm algorithm,
       final NumbersIngester numbersIngester,
       final NumbersProducer numbersProducer) {
-    this.algorithm = algorithmClass.newInstance();
+    this.algorithm = algorithm;
     this.numbersIngester = numbersIngester;
     this.numbersProducer = numbersProducer;
   }
