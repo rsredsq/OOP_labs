@@ -42,6 +42,7 @@ public class MultithreadedFactorizer extends Factorizer {
     tasksExecutor = Executors.newFixedThreadPool(numThreads,
         new ThreadFactoryBuilder()
             .setNameFormat("factorization-task-thread-pool-%d")
+            .setDaemon(true)
             .build());
   }
 
