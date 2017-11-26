@@ -10,18 +10,13 @@ import com.rsredsq.oop.lab4.algorithm.FactorizationAlgorithm;
 import lombok.SneakyThrows;
 
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class MultithreadedFactorizer extends Factorizer {
 
   private final int numThreads;
 
   private final ExecutorService tasksExecutor;
-
-  private final BlockingQueue<CompletableFuture<List<Long>>> factorizationTasks = Queues.newLinkedBlockingQueue();
 
   public MultithreadedFactorizer(
       final FactorizationAlgorithm algorithm,
@@ -42,35 +37,31 @@ public class MultithreadedFactorizer extends Factorizer {
       final int numThreads) {
     super(algorithm, numbersIngester, numbersProducer);
     this.numThreads = numThreads;
-    tasksExecutor = Executors.newFixedThreadPool(numThreads,
+    tasksExecutor = new ThreadPoolExecutor(numThreads, numThreads, 0, TimeUnit.MILLISECONDS,
+        new LinkedBlockingQueue<>(),
         new ThreadFactoryBuilder()
             .setNameFormat("factorization-task-thread-pool-%d")
-            .setDaemon(true)
             .build());
   }
 
   @Override
+  @SneakyThrows
   public void factorize() {
     while (numbersIngester.hasNextNumber()) {
       final long nextNumber = numbersIngester.getNextNumber();
       runAsyncFactorization(nextNumber);
     }
 
-    outputProducedNumbers();
-  }
-
-  private void outputProducedNumbers() {
-    factorizationTasks.forEach((future) -> {
-      final List<Long> result = future.join();
-      numbersProducer.outputFactorizedNumbers(result);
-    });
+    tasksExecutor.shutdown();
+    tasksExecutor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
   }
 
   @SneakyThrows
   private void runAsyncFactorization(final long number) {
-    final CompletableFuture<List<Long>> task =
-        CompletableFuture.supplyAsync(() -> algorithm.factorize(number), tasksExecutor);
-
-    factorizationTasks.put(task);
+    CompletableFuture.supplyAsync(() -> algorithm.factorize(number), tasksExecutor).thenAccept((result) -> {
+      synchronized (numbersProducer) {
+        numbersProducer.outputFactorizedNumbers(result);
+      }
+    });
   }
 }
