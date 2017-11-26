@@ -4,9 +4,9 @@ import com.rsredsq.oop.lab4.algorithm.FactorizationAlgorithm;
 import lombok.SneakyThrows;
 
 public abstract class Factorizer {
-  protected FactorizationAlgorithm algorithm;
-  protected NumbersIngester numbersIngester;
-  protected NumbersProducer numbersProducer;
+  protected final FactorizationAlgorithm algorithm;
+  protected final NumbersIngester numbersIngester;
+  protected final NumbersProducer numbersProducer;
 
   public Factorizer(
       final FactorizationAlgorithm algorithm,
